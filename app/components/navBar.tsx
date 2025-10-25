@@ -86,16 +86,21 @@ const NavBar: React.FC = () => {
     }, []);
 
     const scrollToSection = (sectionId: string) => {
+        // Simply scroll to the section - Lenis will handle smooth scrolling
         const element = document.getElementById(sectionId);
         if (element) {
-            gsap.to(window, {
-                duration: 1.5,
-                scrollTo: {
-                    y: element,
-                    offsetY: 80, // Offset for fixed navbar
-                },
-                ease: 'power3.inOut',
-            });
+            // Get Lenis instance from window if available
+            const lenis = (window as any).lenis;
+            if (lenis) {
+                lenis.scrollTo(element, {
+                    offset: -80,
+                    duration: 2,
+                    easing: (t: number) => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1,
+                });
+            } else {
+                // Fallback to native smooth scroll if Lenis not available
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
     };
     

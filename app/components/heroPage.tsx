@@ -167,10 +167,10 @@ export default function HeroPage() {
                             className="relative z-20 will-change-transform parallax-3d"
                         >
                             <Image
-                                src="/KFC-Bucket.png"
+                                src="/KFC-Bucket-1.png"
                                 alt="KFC Bucket"
-                                width={600}
-                                height={600}
+                                width={630}
+                                height={630}
                                 className="drop-shadow-2xl"
                                 priority
                             />

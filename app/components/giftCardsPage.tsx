@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function GiftCardsPage() {
     return (
-        <div className="relative mt-[-100px] min-h-screen py-16 px-4 sm:px-8">
+        <div className="relative mt-[-50px] min-h-screen py-16 px-4 sm:px-8">
             <div className="max-w-7xl mx-auto">
                 {/* header Gift Card Section */}
                 <section className="py-20 px-6">

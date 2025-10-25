@@ -240,7 +240,7 @@ export default function CareersPage() {
                         <InfiniteMenu items={items} />
                     </div>
                         <p>Click & Drag to move between steps in process</p>
-                    <p className="mt-6 text-sm text-gray-600 max-w-4xl mx-auto">
+                    <p className="text-sm text-gray-600 max-w-4xl mx-auto">
                         Privacy Notice for California Applicants: We value your privacy and comply with all applicable regulations.
                     </p>
                 </div>
