@@ -135,7 +135,7 @@ export default function CareersPage() {
                     <World
                         globeConfig={{
                             pointSize: 6,
-                            globeColor: "#1a1a1a",
+                            globeColor: "#000000ff",
                             showAtmosphere: true,
                             atmosphereColor: "#E4002B",
                             atmosphereAltitude: 0.25,

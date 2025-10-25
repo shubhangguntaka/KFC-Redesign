@@ -15,7 +15,7 @@ if (typeof window !== "undefined") {
 declare module "@react-three/fiber" {
   interface ThreeElements {
     threeGlobe: ThreeElements["mesh"] & {
-      new (): ThreeGlobe;
+      new (): any;
     };
   }
 }
