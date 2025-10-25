@@ -3,7 +3,8 @@
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import gsap from "gsap";
 
 export const HoverEffect = ({
   items,
@@ -20,7 +21,7 @@ export const HoverEffect = ({
   className?: string;
   enableScroll?: boolean;
 }) => {
-  let [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
     <div
@@ -95,12 +96,58 @@ export const Card = ({
   className?: string;
   children: React.ReactNode;
 }) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const card = cardRef.current;
+    if (!card) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = ((y - centerY) / centerY) * -10;
+      const rotateY = ((x - centerX) / centerX) * 10;
+      
+      gsap.to(card, {
+        rotationX: rotateX,
+        rotationY: rotateY,
+        transformPerspective: 1000,
+        duration: 0.4,
+        ease: 'power2.out',
+      });
+    };
+
+    const handleMouseLeave = () => {
+      gsap.to(card, {
+        rotationX: 0,
+        rotationY: 0,
+        duration: 0.6,
+        ease: 'elastic.out(1, 0.5)',
+      });
+    };
+
+    card.addEventListener('mousemove', handleMouseMove);
+    card.addEventListener('mouseleave', handleMouseLeave);
+
+    return () => {
+      card.removeEventListener('mousemove', handleMouseMove);
+      card.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, []);
+
   return (
     <div
+      ref={cardRef}
       className={cn(
-        "rounded-2xl h-full w-full overflow-hidden bg-white border border-transparent group-hover:border-[#E4002B] relative z-20",
+        "menu-card rounded-2xl h-full w-full overflow-hidden bg-white border border-transparent group-hover:border-[#E4002B] relative z-20 transition-shadow duration-300 group-hover:shadow-xl",
         className
       )}
+      style={{ transformStyle: 'preserve-3d' }}
     >
       <div className="relative z-50">
         <div className="p-4">{children}</div>

@@ -126,11 +126,10 @@ export default function MenuPage() {
     if (!menuHeaderRef.current || !latestHeaderRef.current || !menuGridRef.current) return;
 
     const ctx = gsap.context(() => {
-      // Animate menu header on scroll
+      // Animate menu header with clip-path reveal
       gsap.from(menuHeaderRef.current, {
-        opacity: 0,
-        y: 80,
-        duration: 1,
+        clipPath: 'inset(0 100% 0 0)',
+        duration: 1.2,
         ease: 'power3.out',
         scrollTrigger: {
           trigger: menuHeaderRef.current,
@@ -139,24 +138,33 @@ export default function MenuPage() {
         },
       });
 
-      // Animate menu grid on scroll
-      gsap.from(menuGridRef.current, {
-        opacity: 0,
-        y: 60,
-        duration: 1.2,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: menuGridRef.current,
-          start: 'top 85%',
-          toggleActions: 'play none none none',
-        },
-      });
+      // Staggered menu grid animation with 3D effect
+      const menuItems = menuGridRef.current?.querySelectorAll('.menu-card');
+      if (menuItems && menuItems.length > 0) {
+        gsap.from(menuItems, {
+          opacity: 0,
+          y: 60,
+          rotationX: -45,
+          scale: 0.8,
+          duration: 0.8,
+          stagger: {
+            each: 0.1,
+            from: 'start',
+          },
+          ease: 'back.out(1.4)',
+          scrollTrigger: {
+            trigger: menuGridRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+        });
+      }
 
-      // Animate latest header on scroll
+      // Animate latest header with slide and fade
       gsap.from(latestHeaderRef.current, {
         opacity: 0,
-        x: -80,
-        duration: 1,
+        x: -100,
+        duration: 1.2,
         ease: 'power3.out',
         scrollTrigger: {
           trigger: latestHeaderRef.current,
@@ -167,6 +175,38 @@ export default function MenuPage() {
     });
 
     return () => ctx.revert();
+  }, []);
+
+  // Button micro-interactions
+  useEffect(() => {
+    const buttons = document.querySelectorAll('button, a[href]');
+    
+    buttons.forEach((btn) => {
+      btn.addEventListener('mouseenter', () => {
+        gsap.to(btn, { scale: 1.05, duration: 0.2, ease: 'power2.out' });
+      });
+      
+      btn.addEventListener('mouseleave', () => {
+        gsap.to(btn, { scale: 1, duration: 0.3, ease: 'elastic.out(1, 0.5)' });
+      });
+      
+      btn.addEventListener('mousedown', () => {
+        gsap.to(btn, { scale: 0.95, duration: 0.1 });
+      });
+      
+      btn.addEventListener('mouseup', () => {
+        gsap.to(btn, { scale: 1.05, duration: 0.1 });
+      });
+    });
+
+    return () => {
+      buttons.forEach((btn) => {
+        btn.removeEventListener('mouseenter', () => {});
+        btn.removeEventListener('mouseleave', () => {});
+        btn.removeEventListener('mousedown', () => {});
+        btn.removeEventListener('mouseup', () => {});
+      });
+    };
   }, []);
 
   return (

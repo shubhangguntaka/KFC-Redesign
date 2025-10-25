@@ -24,6 +24,67 @@ const NavBar: React.FC = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    // Button and icon micro-interactions
+    useEffect(() => {
+        const icons = document.querySelectorAll('.nav-icon');
+        const startButton = document.querySelector('.start-order-btn');
+        
+        icons.forEach((icon) => {
+            icon.addEventListener('mouseenter', () => {
+                gsap.to(icon, { 
+                    scale: 1.2, 
+                    rotation: 5,
+                    duration: 0.3, 
+                    ease: 'back.out(2)' 
+                });
+            });
+            
+            icon.addEventListener('mouseleave', () => {
+                gsap.to(icon, { 
+                    scale: 1, 
+                    rotation: 0,
+                    duration: 0.4, 
+                    ease: 'elastic.out(1, 0.5)' 
+                });
+            });
+        });
+
+        if (startButton) {
+            startButton.addEventListener('mouseenter', () => {
+                gsap.to(startButton, { 
+                    scale: 1.08,
+                    boxShadow: '0 8px 20px rgba(228, 0, 43, 0.4)',
+                    duration: 0.3,
+                    ease: 'power2.out'
+                });
+            });
+            
+            startButton.addEventListener('mouseleave', () => {
+                gsap.to(startButton, { 
+                    scale: 1,
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                    duration: 0.4,
+                    ease: 'elastic.out(1, 0.6)'
+                });
+            });
+
+            startButton.addEventListener('mousedown', () => {
+                gsap.to(startButton, { scale: 0.95, duration: 0.1 });
+            });
+            
+            startButton.addEventListener('mouseup', () => {
+                gsap.to(startButton, { scale: 1.08, duration: 0.1 });
+            });
+        }
+
+        return () => {
+            icons.forEach((icon) => {
+                icon.removeEventListener('mouseenter', () => {});
+                icon.removeEventListener('mouseleave', () => {});
+            });
+        };
+    }, []);
+
     const scrollToSection = (sectionId: string) => {
         const element = document.getElementById(sectionId);
         if (element) {
@@ -124,17 +185,17 @@ const NavBar: React.FC = () => {
 
                 {/* Right side user actions */}
                 <div className="flex gap-6 items-center ml-8 text-black">
-                    <a href="" className="transition-colors hover:text-[#E4002B]" title='Sign Up/Sign In' aria-label="User Profile">
+                    <a href="" className="nav-icon transition-colors hover:text-[#E4002B]" title='Sign Up/Sign In' aria-label="User Profile">
                         <SmileTwoTone twoToneColor={kfcRed} className="text-2xl" />
                     </a>
-                    <a href="" className="transition-colors hover:text-[#E4002B]" title='Cart' aria-label="Shopping Cart">
+                    <a href="" className="nav-icon transition-colors hover:text-[#E4002B]" title='Cart' aria-label="Shopping Cart">
                         <ShoppingTwoTone twoToneColor={kfcRed} className="text-2xl" />
                     </a>
                     <Button 
                         type="primary" 
                         size="large"
+                        className="start-order-btn hover:!bg-[#c4002b] hover:!border-[#c4002b] text-base font-semibold"
                         style={{ backgroundColor: kfcRed, borderColor: kfcRed }}
-                        className="hover:!bg-[#c4002b] hover:!border-[#c4002b] text-base font-semibold"
                     >
                         Start Order
                     </Button>

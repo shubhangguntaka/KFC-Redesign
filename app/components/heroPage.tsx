@@ -18,29 +18,55 @@ export default function HeroPage() {
         if (!bucketRef.current || !sectionRef.current || !headlineRef.current || !subtextRef.current) return;
 
         const ctx = gsap.context(() => {
-            // Smooth fade in on load
-            gsap.from(headlineRef.current, {
-                opacity: 0,
-                y: 100,
-                duration: 1.2,
-                ease: 'power3.out',
-                delay: 0.3,
-            });
+            // Split headline into characters for staggered animation
+            const headline = headlineRef.current;
+            if (headline) {
+                const text = headline.textContent || '';
+                headline.innerHTML = text
+                    .split('')
+                    .map((char) => `<span class="inline-block char">${char === ' ' ? '&nbsp;' : char}</span>`)
+                    .join('');
+                
+                // Staggered character animation
+                gsap.from('.char', {
+                    opacity: 0,
+                    y: 80,
+                    rotationX: -90,
+                    stagger: 0.02,
+                    duration: 0.8,
+                    ease: 'back.out(1.7)',
+                    delay: 0.3,
+                });
+            }
 
+            // Bucket entrance with bounce
             gsap.from(bucketRef.current, {
                 opacity: 0,
-                scale: 0.8,
-                duration: 1.5,
-                ease: 'power3.out',
+                scale: 0.3,
+                rotation: -15,
+                duration: 1.8,
+                ease: 'elastic.out(1, 0.6)',
                 delay: 0.5,
             });
 
+            // Subtext entrance
             gsap.from(subtextRef.current, {
                 opacity: 0,
                 y: 50,
                 duration: 1,
                 ease: 'power3.out',
-                delay: 0.8,
+                delay: 1.2,
+            });
+
+            // Floating idle animation for bucket
+            gsap.to(bucketRef.current, {
+                y: -15,
+                rotation: 2,
+                duration: 2.5,
+                yoyo: true,
+                repeat: -1,
+                ease: 'sine.inOut',
+                delay: 2,
             });
 
             // Parallax scroll up effect when menu enters
