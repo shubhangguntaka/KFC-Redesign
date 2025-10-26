@@ -179,11 +179,11 @@ export function Globe({ globeConfig, data }: WorldProps) {
   .arcDashAnimateTime((_: any) => defaultProps.arcTime);
 
     globeRef.current
-      .pointsData(filteredPoints)
-      .pointColor((e) => (e as { color: string }).color)
-      .pointsMerge(true)
-      .pointAltitude(0.0)
-      .pointRadius(2);
+  .pointsData(filteredPoints)
+  .pointColor((e: any) => (e as { color: string }).color)
+  .pointsMerge(true)
+  .pointAltitude((_: any) => 0.0)
+  .pointRadius((_: any) => 2);
 
     globeRef.current
       .ringsData([])
